@@ -13,6 +13,7 @@ from copy import deepcopy
 import pygc
 from time import sleep
 import aislib
+import sys
 
 nm_to_metres = 1852.0
 # proximity_radius = 50.0 / nm_to_metres
@@ -219,7 +220,7 @@ if __name__ == "__main__":
     # for leg in route.legs:
     #     print str(leg)
 
-    v = Vessel(503633800, "TRILOGY")
+    v = Vessel(503633801, "RUBY PRINCESS", cruise_speed=14.0)
 
     lkp = LKP(v, leg=route.first_leg, pos=route.first_leg.start_point, course=0.0, speed=v.cruise_speed)
     # print(lkp)
@@ -228,11 +229,12 @@ if __name__ == "__main__":
     i = 0
     while 1:
         lkp = lkp.next()
-        print(lkp.as_AIS_pos_report())
+        sys.stdout.write(lkp.as_AIS_pos_report() + "\n")
         i += 1
         if i >= 9:
-            print(v.as_AIS_report())
+            sys.stdout.write(v.as_AIS_report() + "\n")
             i = 0
+        sys.stdout.flush()
         sleep(6)
          
 
