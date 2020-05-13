@@ -4,6 +4,7 @@
 # issue NMEA sentences representing position reports and vessel identification details 
 # at specified periods
 
+import argparse
 import geojson
 from shapely.geometry import Point
 from geopy.distance import great_circle
@@ -198,9 +199,16 @@ class LKP(object):
 
 if __name__ == "__main__":
 
+    parser = argparse.ArgumentParser(description='Vessel follows route')
+    parser.add_argument('-f', '--fname', required=True, help='Route file (json format')
+    parser.add_argument('-m', '--mmsi', required=True, type=long, help='Vessel mmsi number')
+    parser.add_argument('-n', '--vessel_name', required=True, help='Vessel name')
+    parser.add_argument('-s', '--vessel_speed', type=float, required=True, help='Vessel speed in knots')
+    args = parser.parse_args()
+
+
     # read the route from a geojson file
-    fname = "./lbg_route.json"
-    fname = "./lake_pambula_route.json"
+    fname = args.fname
     with open(fname,'r') as infile:
         gj = geojson.load(infile)
 
@@ -220,7 +228,7 @@ if __name__ == "__main__":
     # for leg in route.legs:
     #     print str(leg)
 
-    v = Vessel(503633801, "RUBY PRINCESS", cruise_speed=14.0)
+    v = Vessel(args.mmsi, args.vessel_name.upper(), cruise_speed=args.vessel_speed)
 
     lkp = LKP(v, leg=route.first_leg, pos=route.first_leg.start_point, course=0.0, speed=v.cruise_speed)
     # print(lkp)

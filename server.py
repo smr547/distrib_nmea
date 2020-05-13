@@ -4,11 +4,16 @@ import socket
 import sys
 import Queue
 import time
+import argparse
 
-# open the input fifo
 
-# dummy = open("./nmea_fifo", "w")
-nmea_fifo = open("./nmea_fifo", "r", 0)
+parser = argparse.ArgumentParser("Read NMEA sentence from FIFO and distribute to TCP clients")
+parser.add_argument('-f', '--fifo', default='./nmea_fifo', help='path to NMEA input FIFO')
+parser.add_argument('-p', '--port', default=10000, type=int, help='TCP port for client connections')
+args = parser.parse_args()
+
+
+nmea_fifo = open(args.fifo, "r", 0)
 
 
 # Create a TCP/IP socket
@@ -16,7 +21,7 @@ server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.setblocking(0)
 
 # Bind the socket to the port
-server_address = ('', 10000)
+server_address = ('', args.port)
 print >>sys.stderr, 'starting up on %s port %s' % server_address
 server.bind(server_address)
 
