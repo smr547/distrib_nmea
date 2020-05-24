@@ -8,7 +8,7 @@ The system reads NMEA sentences from multiple sources and distribute to multiple
 The software is designed to run on a [Raspberry Pi](https://www.raspberrypi.org/) installed on board a yacht. 
 The system will collect data from various sensors on board and distribute copies to any remote client. 
 The system has been tested with [Navionics](https://www.navionics.com/aus/) running on various iPads
-and receiving real time AIS data from the Raspberry Pi.
+and receiving real time [AIS](https://www.amsa.gov.au/safety-navigation/navigation-systems/about-automatic-identification-system) data from the Raspberry Pi.
 
 ## Server
 The python program [server.py](./server.py) is run as a system service [see the control file](./nmea_server.service). 
@@ -24,7 +24,7 @@ server and distributed to the attached clients.
 
 ## Test service
 The only ``NMEA source service`` currently available is the [follow route program](./follow_route.py). This program is 
-designed for testing the system. It simulates the operation of an AIS system by simulating the passage of a vessel around a
+designed for testing the system. It simulates the operation of an AIS system by predicting the passage of a vessel around a
 specified route. The program will emit real time AIS sentences as the vessel moves around the route
 
 * routes are generated using the [geojson tool](http://geojson.io) 
