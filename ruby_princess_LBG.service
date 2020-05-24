@@ -1,0 +1,14 @@
+[Unit]
+Description=Ruby Princess cruising LBG and emitting AIS NMEA sentences
+After=network-online.target
+
+[Service]
+ExecStart=/bin/bash /home/smr/projects/distrib_nmea/ruby_princess_LBG.sh
+WorkingDirectory=/home/smr/projects/distrib_nmea
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=smr
+
+[Install]
+WantedBy=multi-user.target
