@@ -41,9 +41,9 @@ message_queues = {}
 while inputs:
 
     # Wait for at least one of the sockets to be ready for processing
-    print >>sys.stderr, '\nwaiting for the next event'
+    # print >>sys.stderr, '\nwaiting for the next event'
     readable, writeable, exceptional = select.select(inputs, outputs, inputs)
-    print "select returned, %d readable, %d writeable, %d exceptional\n" % (len(readable), len(writeable), len(exceptional))
+    # print "select returned, %d readable, %d writeable, %d exceptional\n" % (len(readable), len(writeable), len(exceptional))
 
     # process the readable files
 
@@ -52,7 +52,7 @@ while inputs:
 
             # A "readable" server socket is ready to accept a connection
             connection, client_address = s.accept()
-            print >>sys.stderr, 'new connection from', client_address
+            # print >>sys.stderr, 'new connection from', client_address
             connection.setblocking(0)
             outputs.append(connection)
             inputs.append(connection)
@@ -62,25 +62,26 @@ while inputs:
             message_queues[connection] = Queue.Queue()
 
         elif s is nmea_fifo:
-            print >>sys.stderr, 'Reading from fifo'
+            # print >>sys.stderr, 'Reading from fifo'
             data = nmea_fifo.readline()
             if len(data) == 0:
                 print >>sys.stderr, "No data read from fifo, must be closed"
                 sys.exit(0) 
             # distribute msg to all queues
-            sys.stdout.write("read data: %s\n" % (data, ))
-            sys.stdout.flush()
+            # sys.stdout.write("read data: %s\n" % (data, ))
+            # sys.stdout.flush()
             for c in message_queues.keys():
                 message_queues[c].put(data) 
                 if c not in outputs:
                     outputs.append(c)
             if len(message_queues) == 0:
-                print >> sys.stderr, "Discarding sentence, no readers"
+                # print >> sys.stderr, "Discarding sentence, no readers"
+                pass
 
         else:
             # any input from a client should close the connection
    
-            print >>sys.stderr, "Closing client %s" % (s)
+            # print >>sys.stderr, "Closing client %s" % (s)
             inputs.remove(s)
             if s in outputs:
                 outputs.remove(s)
@@ -91,14 +92,14 @@ while inputs:
     # Handle outputs
     for s in writeable:
         try:
-            print >>sys.stderr, "%s is writeables" % (s)
+            # print >>sys.stderr, "%s is writeables" % (s)
             next_msg = message_queues[s].get_nowait()
         except Queue.Empty:
             # No messages waiting so stop checking for writability.
-            print >>sys.stderr, 'output queue for', s.getpeername(), 'is empty'
+            # print >>sys.stderr, 'output queue for', s.getpeername(), 'is empty'
             outputs.remove(s)
         else:
-            print >>sys.stderr, 'sending "%s" to %s' % (next_msg, s.getpeername())
+            # print >>sys.stderr, 'sending "%s" to %s' % (next_msg, s.getpeername())
             s.send(next_msg)
 
     # process exceptions
