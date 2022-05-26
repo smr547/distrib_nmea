@@ -201,7 +201,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description='Vessel follows route')
     parser.add_argument('-f', '--fname', required=True, help='Route file (json format')
-    parser.add_argument('-m', '--mmsi', required=True, type=long, help='Vessel mmsi number')
+    parser.add_argument('-m', '--mmsi', required=True, type=int, help='Vessel mmsi number')
     parser.add_argument('-n', '--vessel_name', required=True, help='Vessel name')
     parser.add_argument('-s', '--vessel_speed', type=float, required=True, help='Vessel speed in knots')
     args = parser.parse_args()
